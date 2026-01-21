@@ -1,180 +1,180 @@
-# Мой Банк - Система управления финансами
+# Mening Bankim-moliyaviy boshqaruv tizimi
 
-## Функциональность
+## Funktsionallik
 
-### ✅ Основные возможности:
+### ✅ Asosiy imkoniyatlar:
 
-1. **Управление счетами**
-   - Создание и управление несколькими счетами
-   - Поддержка разных валют (UZS, USD, EUR)
-   - Отслеживание баланса каждого счета
-   - Персонализированные иконки для счетов
+1. ** Hisoblarni boshqarish**
+   - Bir nechta hisoblarni yaratish va boshqarish
+   - Turli valyutalarni qo'llab-quvvatlash (UZS, USD, EUR)
+   - Har bir hisob balansini kuzatish
+   - Hisoblar uchun moslashtirilgan piktogrammalar
 
-2. **Операции и транзакции**
-   - Добавление расходов и доходов
-   - Категоризация операций
-   - История всех транзакций
-   - Фильтрация по типу, категории и периоду
+2. ** Operatsiyalar va operatsiyalar**
+   - Xarajatlar va daromadlarni qo'shish
+   - Operatsiyalarni tasniflash
+   - Barcha operatsiyalar tarixi
+   - Turi, toifasi va davri bo'yicha filtrlash
 
-3. **Регулярные платежи**
-   - Создание повторяющихся платежей
-   - Поддержка разных частотностей (ежедневно, еженедельно, ежемесячно, ежегодно)
-   - Активация/деактивация платежей
-   - Отслеживание последнего выполнения
+3. ** Muntazam to'lovlar**
+   - Takroriy to'lovlarni yaratish
+   - Turli chastotalarni qo'llab-quvvatlash (kunlik, haftalik, oylik, yillik)
+   - To'lovlarni faollashtirish/o'chirish
+   - Oxirgi bajarilishini kuzatish
 
-4. **Статистика и аналитика**
-   - Графики расходов по категориям (круговая диаграмма)
-   - Графики расходов по дням (линейный график)
-   - Анализ по месяцам и периодам
-   - Топ категорий по расходам
+4. ** Statistika va tahlil**
+   - Toifalar bo'yicha xarajatlar jadvallari (pirog diagrammasi)
+   - Kunlik xarajatlar jadvallari (chiziqli grafik)
+   - Oylar va davrlar bo'yicha tahlil
+   - Xarajatlar bo'yicha eng yaxshi toifalar
 
-5. **Многоязычная поддержка**
-   - Русский (РУ) 🇷🇺
-   - Английский (EN) 🇬🇧
-   - Узбекский (UZ) 🇺🇿
-   - Переключение языков прямо в интерфейсе
+5. **Ko'p tilli qo'llab-quvvatlash**
+   - Rus (ru) 🇺 🇿 
+   - Ingliz tili (EN) 🇬 🇧 
+   - O'zbek (uz) 🇺🇿
+   - To'g'ridan-to'g'ri interfeysda tillarni almashtirish
 
-6. **Администраторская панель**
-   - Полное управление данными через Django Admin
-   - Управление категориями, счетами, операциями
+6. ** Administrator paneli**
+   - Django Admin orqali ma'lumotlarni to'liq boshqarish
+   - Kategoriyalar, hisoblar, operatsiyalarni boshqarish
 
-## Структура проекта
+## Loyihaning tuzilishi
 
 ```
 bank/
-├── config/           # Главные настройки Django
+─ ─ - config / # Django-ning asosiy sozlamalari
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-├── configapp/        # Основное приложение
-│   ├── models.py     # Модели данных
-│   ├── views.py      # Представления
-│   ├── forms.py      # Формы
-│   ├── admin.py      # Админ-панель
-│   ├── urls.py       # URL-маршруты
-│   └── templates/    # HTML-шаблоны
-├── locale/           # Переводы
+configapp / # asosiy dastur
+- models.py # ma'lumotlar modellari
+- views.py # taqdimotlar
+- forms.py # shakllar
+- admin.py # boshqaruv paneli
+- urls.py # URL yo'nalishlari
+│   └── templates/    # HTML shablonlari
+─ ─ - locale / # tarjimalar
 │   ├── en/
 │   ├── ru/
 │   └── uz/
 └── manage.py
 ```
 
-## Модели данных
+## Ma'lumotlar modellari
 
-### Account (Счет)
-- Название счета
-- Баланс
-- Валюта (UZS, USD, EUR)
-- Иконка
-- Дата создания
+### Hisob (Hisob)
+- Hisob nomi
+- Balans
+- Valyuta (UZS, USD, EUR)
+- Belgi
+- Yaratilgan sana
 
-### Category (Категория)
-- Название
-- Тип (Доход/Расход)
-- Иконка
-- Цвет
+### Kategoriya (Kategoriya)
+- Nomi
+- Turi (Daromad / Xarajat)
+- Belgi
+- Rang
 
-### Transaction (Операция)
-- Счет
-- Категория
-- Тип (Доход/Расход/Перевод)
-- Сумма
-- Описание
-- Дата
+### Transaction (Operatsiya)
+- Hisob
+- Kategoriya
+- Turi (Daromad / Xarajat / Transfer)
+- Miqdori
+- Tavsif
+- Sana
 
-### RecurringPayment (Регулярный платеж)
-- Счет
-- Категория
-- Сумма
-- Описание
-- Частотность
-- Дата начала/окончания
-- Статус активности
+### Takroriy to'lov (muntazam to'lov)
+- Hisob
+- Kategoriya
+- Miqdori
+- Tavsif
+- Chastota
+- Boshlanish/tugash sanasi
+- Faoliyat holati
 
-## Установка и запуск
+## O'rnatish va ishga tushirish
 
-### 1. Установка зависимостей
+### 1. Bog'liqliklarni o'rnatish
 ```bash
 pip install django
 ```
 
-### 2. Создание миграций
+### 2. Migratsiyalar yaratish
 ```bash
 python manage.py migrate
 ```
 
-### 3. Создание суперпользователя
+### 3. Superuser yaratish
 ```bash
 python manage.py createsuperuser
 ```
 
-### 4. Запуск сервера
+### 4. Serverni ishga tushirish
 ```bash
 python manage.py runserver
 ```
 
-### 5. Доступ к приложению
-- Главная страница: http://localhost:8000/
-- Русская версия: http://localhost:8000/ru/
-- Английская версия: http://localhost:8000/en/
-- Узбекская версия: http://localhost:8000/uz/
-- Админ-панель: http://localhost:8000/admin/
+### 5. Ilovaga kirish
+- Bosh sahifa: http://localhost:8000/
+- Ruscha versiyasi: http://localhost:8000/ru/
+- Inglizcha versiyasi: http://localhost:8000/en/
+- O'zbekcha versiyasi: http://localhost:8000/uz/
+-Administrator paneli: http://localhost:8000/admin/
 
-## Языки интерфейса
+## Interfeys tillari
 
-Переключайте язык с помощью кнопок в правом верхнем углу:
+Yuqori o'ng burchakdagi tugmalar yordamida tilni almashtiring:
 - **EN** - English
-- **РУ** - Русский
-- **UZ** - Узбекский
+- **Ru * * - rus Tili
+- **UZ * * - O'zbek
 
-Все тексты в приложении переводятся в зависимости от выбранного языка.
+Ilovadagi barcha matnlar tanlangan tilga qarab tarjima qilinadi.
 
-## Примеры использования
+## Foydalanish misollari
 
-### Добавление счета
-1. Перейдите в раздел "Счета"
-2. Нажмите "Добавить счет"
-3. Заполните название, начальный баланс и валюту
-4. Выберите иконку (эмодзи)
+### Hisob-fakturani qo'shish
+1. Hisoblar bo'limiga o'ting
+2. "Hisob-Fakturani Qo'shish"Tugmasini Bosing
+3. Ismni, boshlang'ich balansni va valyutani to'ldiring
+4. Belgini tanlang (kulgichlar)
 
-### Добавление операции
-1. На главной странице или в деталях счета нажмите кнопку "+"
-2. Выберите тип (Расход/Доход)
-3. Выберите категорию
-4. Укажите сумму и описание
-5. Выберите дату
+### Operatsiyani qo'shish
+1. Bosh sahifada yoki hisob tafsilotlarida "+"tugmasini bosing
+2. Turini tanlang (iste'mol/Daromad)
+3. Toifani tanlang
+4. Miqdor va tavsifni ko'rsating
+5. Sanani tanlang
 
-### Регулярные платежи
-1. Перейдите в "Платежи"
-2. Нажмите "Добавить платеж"
-3. Установите параметры: счет, сумма, частотность
-4. Сохраните
+### Muntazam to'lovlar
+1. "To'lovlar" ga o'ting
+2. "To'lovni Qo'shish" tugmasini bosing
+3. Parametrlarni o'rnating: hisob, miqdor, chastota
+4. Saqlash
 
-### Просмотр статистики
-1. Перейдите в "Статистика"
-2. Просмотрите графики расходов по категориям и дням
-3. Анализируйте топ категорий по расходам
+### Statistikani ko'rish
+1. Statistikaga o'ting
+2. Xarajatlar jadvallarini toifalar va kunlar bo'yicha ko'rib chiqing
+3. Xarajatlar bo'yicha eng yaxshi toifalarni tahlil qiling
 
-## Технология
+## Texnologiya
 
 - **Backend**: Django 6.0+
-- **Database**: SQLite (по умолчанию, можно заменить на PostgreSQL/MySQL)
+- **Ma'lumotlar bazasi**: SQLite (sukut bo'yicha PostgreSQL/MySQL bilan almashtirilishi mumkin)
 - **Frontend**: Bootstrap 5
 - **Charts**: Chart.js
 - **i18n**: Django Internationalization
 
-## Возможные расширения
+## Mumkin kengaytmalar
 
-- Импорт/экспорт данных (CSV, Excel)
-- Бюджетирование по категориям
-- Уведомления о превышении бюджета
-- Синхронизация между устройствами
-- API для мобильного приложения
-- Отчеты и экспорт данных
-- Теги для операций
-- Совместные счета
+- Ma'lumotlarni import/eksport qilish (CSV, Excel)
+- Toifalar bo'yicha byudjetlashtirish
+- Byudjetdan tashqari bildirishnomalar
+- Qurilmalar o'rtasida sinxronizatsiya
+- Mobil ilova uchun API
+- Hisobotlar va ma'lumotlarni eksport qilish
+- Operatsiyalar uchun teglar
+- Qo'shma hisoblar
 
-## Поддержка
+## Qo'llab-quvvatlash
 
-Для вопросов или предложений свяжитесь с разработчиком.
+Savollar yoki takliflar uchun ishlab chiquvchi bilan bog'laning.
