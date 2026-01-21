@@ -1,60 +1,35 @@
-"""
-URL configuration for config project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from rest_framework import permissions
 
 from configapp.api_views import (
-    AccountViewSet, TransactionViewSet, CategoryViewSet, RecurringPaymentViewSet
+    AccountViewSet,
+    TransactionViewSet,
+    CategoryViewSet,
+    RecurringPaymentViewSet,
 )
 
-# Swagger Schema View
 schema_view = get_schema_view(
     openapi.Info(
         title="Bank Management API",
-        default_version='v1.0',
-        description="API для управления банковскими счетами, транзакциями и платежами",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="support@example.com"),
-        license=openapi.License(name="BSD License"),
+        default_version='v1',
+        description="Bank API",
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=[permissions.AllowAny],
 )
 
-# Router для API
 router = routers.DefaultRouter()
-router.register(r'accounts', AccountViewSet, basename='account')
-router.register(r'transactions', TransactionViewSet, basename='transaction')
-router.register(r'categories', CategoryViewSet, basename='category')
-router.register(r'recurring-payments', RecurringPaymentViewSet, basename='recurring-payment')
+router.register(r'accounts', AccountViewSet)
+router.register(r'transactions', TransactionViewSet)
+router.register(r'categories', CategoryViewSet)
+router.register(r'recurring-payments', RecurringPaymentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
-    # API endpoints
-    path('api/v1/', include(router.urls)),
-    
-    # Swagger & Redoc documentation
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('swagger.yaml', schema_view.without_ui(cache_timeout=0), name='schema-yaml'),
+    path('api/', include(router.urls)),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
 ]
