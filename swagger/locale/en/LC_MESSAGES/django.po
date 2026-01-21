@@ -1,0 +1,22 @@
+# English translations
+msgid ""
+msgstr ""
+"Project-Id-Version: My Bank\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "My Bank"
+msgstr "My Bank"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Accounts"
+msgstr "Accounts"
+
+msgid "Payments"
+msgstr "Payments"
+
+msgid "Statistics"
+msgstr "Statistics"

@@ -1,0 +1,102 @@
+{% extends 'configapp/base.html' %}
+{% load i18n %}
+
+{% block title %}{{ account.name }} - {% trans 'My Bank' %}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h2><i class="bi bi-wallet2"></i> {{ account.name }}</h2>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{% url 'add_transaction' account.id %}" class="btn btn-primary">
+            <i class="bi bi-plus"></i> {% trans 'New operation' %}
+        </a>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="stat-box">
+            <div class="stat-value">{{ account.balance }}</div>
+            <div class="stat-label">{% trans 'Current balance' %}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-box">
+            <div class="stat-value text-danger">{{ expenses }}</div>
+            <div class="stat-label">{% trans 'Expenses' %}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-box">
+            <div class="stat-value text-success">{{ income }}</div>
+            <div class="stat-label">{% trans 'Income' %}</div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-light border-bottom">
+        <h5 class="mb-0">{% trans 'Filters' %}</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <select name="type" class="form-select" onchange="this.form.submit()">
+                    <option value="">{% trans 'All types' %}</option>
+                    <option value="income" {% if request.GET.type == 'income' %}selected{% endif %}>{% trans 'Income' %}</option>
+                    <option value="expense" {% if request.GET.type == 'expense' %}selected{% endif %}>{% trans 'Expense' %}</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select name="period" class="form-select" onchange="this.form.submit()">
+                    <option value="all" {% if period == 'all' %}selected{% endif %}>{% trans 'All time' %}</option>
+                    <option value="today" {% if period == 'today' %}selected{% endif %}>{% trans 'Today' %}</option>
+                    <option value="week" {% if period == 'week' %}selected{% endif %}>{% trans 'Week' %}</option>
+                    <option value="month" {% if period == 'month' %}selected{% endif %}>{% trans 'Month' %}</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select name="category" class="form-select" onchange="this.form.submit()">
+                    <option value="">{% trans 'All categories' %}</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+                            {{ cat.icon }} {{ cat.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-light border-bottom">
+        <h5 class="mb-0"><i class="bi bi-list"></i> {% trans 'Operations' %} ({{ transactions.count }})</h5>
+    </div>
+    <div class="card-body">
+        {% if transactions %}
+            {% for transaction in transactions %}
+                <div class="transaction-item">
+                    <div>
+                        <span class="transaction-icon">{% if transaction.category %}{{ transaction.category.icon }}{% else %}📌{% endif %}</span>
+                        <div>
+                            <strong>{% if transaction.description %}{{ transaction.description }}{% elif transaction.category %}{{ transaction.category.name }}{% else %}{% trans 'No description' %}{% endif %}</strong>
+                            <br>
+                            <small class="text-muted">{{ transaction.date|date:"d.m.Y H:i" }}</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge {% if transaction.type == 'income' %}badge-income{% else %}badge-expense{% endif %}">
+                            {% if transaction.type == 'income' %}+{% else %}-{% endif %}{{ transaction.amount }}
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted"><i class="bi bi-inbox"></i> {% trans 'No operations found' %}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

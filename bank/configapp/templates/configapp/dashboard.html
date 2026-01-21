@@ -1,0 +1,138 @@
+{% extends 'configapp/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Home' %} - {% trans 'My Bank' %}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="stat-box">
+            <div class="stat-value">{{ total_balance }}</div>
+            <div class="stat-label">{% trans 'Total balance' %}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-box">
+            <div class="stat-value text-danger">{{ today_expenses }}</div>
+            <div class="stat-label">{% trans 'Expenses today' %}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-box">
+            <div class="stat-value text-success">{{ today_income }}</div>
+            <div class="stat-label">{% trans 'Income today' %}</div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-light border-bottom">
+                <h5 class="mb-0"><i class="bi bi-wallet2"></i> {% trans 'My accounts' %}</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    {% for account in accounts %}
+                        <div class="col-md-6">
+                            <div class="card account-card text-center">
+                                <div class="card-body">
+                                    <div style="font-size: 2rem;">{{ account.icon }}</div>
+                                    <h6>{{ account.name }}</h6>
+                                    <div class="balance-text">{{ account.balance }}</div>
+                                    <small>{{ account.currency }}</small>
+                                    <div class="mt-3">
+                                        <a href="{% url 'account_detail' account.id %}" class="btn btn-sm btn-light">{% trans 'More' %}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted">{% trans 'No accounts found.' %} <a href="{% url 'accounts_list' %}">{% trans 'Add account' %}</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-light border-bottom">
+                <h5 class="mb-0"><i class="bi bi-graph-up"></i> {% trans 'Monthly statistics' %}</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center mb-3">
+                    <div class="col-6">
+                        <div>
+                            <span class="badge bg-danger">{% trans 'Expenses' %}</span>
+                            <div style="font-size: 1.5rem; margin-top: 5px;">{{ month_expenses }}</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div>
+                            <span class="badge bg-success">{% trans 'Income' %}</span>
+                            <div style="font-size: 1.5rem; margin-top: 5px;">{{ month_income }}</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'statistics' %}" class="btn btn-primary w-100">
+                    <i class="bi bi-bar-chart"></i> {% trans 'Detailed statistics' %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-light border-bottom">
+        <h5 class="mb-0"><i class="bi bi-clock-history"></i> {% trans 'Recent operations' %}</h5>
+    </div>
+    <div class="card-body">
+        {% if recent_transactions %}
+            {% for transaction in recent_transactions %}
+                <div class="transaction-item">
+                    <div>
+
+                        <span class="transaction-icon">
+    {% if transaction.category and transaction.category.icon %}
+        {{ transaction.category.icon }}
+    {% else %}
+        📌
+    {% endif %}
+</span>
+
+<strong>
+    {% if transaction.description %}
+        {{ transaction.description }}
+    {% elif transaction.category %}
+        {{ transaction.category.name }}
+    {% else %}
+        Без категории
+    {% endif %}
+</strong>
+
+                        
+
+                        <br>
+                        <small class="text-muted">{{ transaction.account.name }} • {{ transaction.date|date:"d.m.Y H:i" }}</small>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge {% if transaction.type == 'income' %}badge-income{% else %}badge-expense{% endif %}">
+                            {% if transaction.type == 'income' %}+{% else %}-{% endif %}{{ transaction.amount }}
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">{% trans 'No operations' %}</p>
+        {% endif %}
+    </div>
+</div>
+
+{% if accounts %}
+<a href="{% url 'add_transaction' first_account.id %}" class="btn btn-add" title="{% trans 'Add operation' %}">
+    <i class="bi bi-plus"></i>
+</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'configapp/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'Statistics' %} - {% trans 'My Bank' %}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h2><i class="bi bi-graph-up"></i> {% trans 'Expense statistics' %}</h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="stat-box">
+            <div class="stat-value text-danger">{{ total_expenses }}</div>
+            <div class="stat-label">{% trans 'Total expenses this month' %}</div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="stat-box">
+            <div class="stat-value text-success">{{ total_income }}</div>
+            <div class="stat-label">{% trans 'Total income this month' %}</div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-light border-bottom">
+                <h5 class="mb-0"><i class="bi bi-pie-chart"></i> {% trans 'Expenses by category' %}</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="categoryChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-light border-bottom">
+                <h5 class="mb-0"><i class="bi bi-line-chart"></i> {% trans 'Expenses by day' %}</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="dailyChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-light border-bottom">
+        <h5 class="mb-0"><i class="bi bi-list"></i> {% trans 'Top categories' %}</h5>
+    </div>
+    <div class="card-body">
+        {% if top_categories %}
+            {% for cat in top_categories %}
+                <div class="transaction-item">
+                    <div>
+                        <span class="transaction-icon">📊</span>
+                        <strong>{{ cat.category__name }}</strong>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge badge-expense">{{ cat.sum }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">{% trans 'No data' %}</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Диаграмма расходов по категориям
+    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(categoryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: [{% for item in expenses_by_category %}'{{ item.category__name }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+            datasets: [{
+                data: [{% for item in expenses_by_category %}{{ item.sum }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                backgroundColor: [
+                    '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'
+                ],
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+    
+    // Диаграмма расходов по дням
+    const dailyCtx = document.getElementById('dailyChart').getContext('2d');
+    new Chart(dailyCtx, {
+        type: 'line',
+        data: {
+            labels: [{% for item in expenses_by_day %}'{{ item.day|date:"d.m" }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+            datasets: [{
+                label: '{% trans "Expenses" %}',
+                data: [{% for item in expenses_by_day %}{{ item.sum }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                borderColor: '#50a089',
+                backgroundColor: 'rgba(80, 160, 137, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
