@@ -1,6 +1,10 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 
 class Account(models.Model):
     """Счет/Кошелек пользователя"""
@@ -10,6 +14,7 @@ class Account(models.Model):
         ('EUR', _('EUR')),
     ]
     
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='accounts')
     name = models.CharField(max_length=100, verbose_name=_('Account name'))
     balance = models.DecimalField(max_digits=12, decimal_places=2, verbose_name=_('Balance'))
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='UZS', verbose_name=_('Currency'))
@@ -31,6 +36,7 @@ class Category(models.Model):
         ('income', _('Income')),
     ]
     
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='categories')
     name = models.CharField(max_length=50, verbose_name=_('Name'))
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, verbose_name=_('Type'))
     icon = models.CharField(max_length=50, default='📊', verbose_name=_('Icon'))
@@ -95,3 +101,11 @@ class RecurringPayment(models.Model):
     
     def __str__(self):
         return f"{self.description} - {self.amount} ({self.get_frequency_display()})"
+
+
+# Signal для создания токена при создании пользователя
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    """Автоматически создаём токен для нового пользователя"""
+    if created:
+        Token.objects.get_or_create(user=instance)
